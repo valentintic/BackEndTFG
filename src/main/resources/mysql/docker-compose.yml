@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mysql_container:
+    build: .
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: valentin
+      MYSQL_DATABASE: almfit
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./initData.sql:/docker-entrypoint-initdb.d/initData.sql

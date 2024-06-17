@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: valentin
+      MYSQL_DATABASE: almfit
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./src/main/resources/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/main/resources/mysql/initData.sql:/docker-entrypoint-initdb.d/initData.sql
+
+  backend:
+    build: .
+    container_name: backend_container
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/almfit
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: valentin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    restart: always
